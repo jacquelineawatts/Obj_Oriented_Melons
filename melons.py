@@ -2,7 +2,7 @@
 
 class AbstractMelonOrder(object):
 
-    def __init__(self, species, qty, tax=None, order_type=None):
+    def __init__(self, species, qty, tax=0.0, order_type=None):
         """Initialize melon order attributes"""
 
         self.species = species
@@ -53,9 +53,25 @@ class InternationalMelonOrder(AbstractMelonOrder):
         return self.country_code
 
     def get_total(self):
-        original_total = super(InternationalMelonOrder, self).get_total()
+        total = super(InternationalMelonOrder, self).get_total()
         if self.qty < 10:
-            new_total = original_total + 3
-            return new_total
-        else:
-            return original_total
+            total += 3
+        return total
+
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    "A government melon order"
+
+    def __init__(self, species, qty):
+        """Initialize melon order attributes"""
+
+        super(GovernmentMelonOrder,self).__init__(species, qty)
+        self.passed_inspection = False
+
+
+    def mark_inspection(self, passed):
+        """Marks melon as passed if user enters True."""
+
+        if passed:
+            self.passed_inspection = True
+
